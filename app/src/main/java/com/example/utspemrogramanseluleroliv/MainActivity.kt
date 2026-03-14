@@ -19,11 +19,11 @@ class MainActivity : AppCompatActivity() {
             val namaDosen = inputNamaDosen.text.toString().trim()
 
             if (namaDosen.isEmpty()) {
-                Toast.makeText(this, "Nama Dosen wajib diisi!", Toast.LENGTH_SHORT).show()
+                inputNamaDosen.error = "Nama Dosen tidak boleh kosong!"
+                inputNamaDosen.requestFocus()
                 return@setOnClickListener
             }
 
-            // Pindah halaman dan mengirim data
             val intent = Intent(this, PanelActivity::class.java).apply {
                 putExtra("NAMA_DOSEN", namaDosen)
             }

@@ -19,7 +19,6 @@ class PanelActivity : AppCompatActivity() {
         val tvStatus = findViewById<TextView>(R.id.tvStatus)
         val tvDaftarAbsen = findViewById<TextView>(R.id.tvDaftarAbsen)
 
-        // Mengambil data dari MainActivity
         val namaDosen = intent.getStringExtra("NAMA_DOSEN") ?: "Tanpa Nama"
         tvSapaan.text = "Selamat bertugas, Dosen $namaDosen"
 
@@ -28,27 +27,35 @@ class PanelActivity : AppCompatActivity() {
             val strRataRata = inputRataRata.text.toString().trim()
 
             if (strJmlMhs.isEmpty() || strRataRata.isEmpty()) {
-                Toast.makeText(this, "Harap isi jumlah mahasiswa dan rata-rata!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Harap lengkapi semua data!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val jmlMhs = strJmlMhs.toIntOrNull() ?: 0
             val rataRata = strRataRata.toDoubleOrNull() ?: 0.0
 
-            // LOGIKA 1: If-Else untuk Status Kelas
-            val statusKelas = if (rataRata >= 80) {
-                "Sangat Baik"
-            } else if (rataRata >= 60) {
-                "Cukup"
-            } else {
-                "Kurang"
-            }
-            tvStatus.text = "Status Kelas: $statusKelas"
+            // Logika If-Else untuk menentukan status
+            val statusKelas: String
+            val warnaStatus: Int
 
-            // LOGIKA 2: Perulangan For untuk Daftar Absen
+            if (rataRata >= 80) {
+                statusKelas = "Sangat Baik"
+                warnaStatus = android.graphics.Color.parseColor("#27AE60") // Hijau
+            } else if (rataRata >= 60) {
+                statusKelas = "Cukup"
+                warnaStatus = android.graphics.Color.parseColor("#F39C12") // Orange
+            } else {
+                statusKelas = "Kurang"
+                warnaStatus = android.graphics.Color.parseColor("#C62828") // Merah
+            }
+
+            tvStatus.text = "Status Kelas: $statusKelas"
+            tvStatus.setTextColor(warnaStatus)
+
+            // Logika Perulangan For
             val teksDaftarAbsen = buildString {
                 for (i in 1..jmlMhs) {
-                    append("Mahasiswa $i: __________________ \n")
+                    append("✓ Mahasiswa $i:\n    Nama: __________________\n    Nilai : ______\n\n")
                 }
             }
             tvDaftarAbsen.text = teksDaftarAbsen
